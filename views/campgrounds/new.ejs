@@ -1,0 +1,36 @@
+<% layout('layout/template.ejs') %>
+
+<div class="row">
+    <h1 class="text-center">New Campground</h1>
+    <div class="col-6 offset-3">
+        <form action="/campgrounds" method="POST">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" name="campground[title]" type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" name="campground[location]" type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Image Url</label>
+                <input class="form-control" name="campground[image]" type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Campground Price</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-control" id="price" name="campground[price]" aria-label="Amount (to the nearest dollar)" placeholder="0.00">
+                 </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" name="campground[description]" type="text"></textarea>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-success" value="Save Campground" type="submit">
+            </div>
+        </form>
+        <a href="/campgrounds">Go back</a>
+    </div>
+</div>
