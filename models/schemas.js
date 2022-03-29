@@ -9,4 +9,11 @@ const campSchema = Joi.object({
     }).required()
 })
 
-module.exports = {campSchema}
+const reviewSChema = Joi.object({
+    review: Joi.object({
+        body: Joi.string().required,
+        rating: Joi.number().required
+    }).required()
+})
+
+module.exports = {campSchema, reviewSChema}
