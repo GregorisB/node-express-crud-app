@@ -1,0 +1,25 @@
+<%- layout('./layout/template.ejs') %>
+<div class="row p-5">
+	<h1 class="text-center">Login</h1>
+	<div class="col-6 offset-3">
+		<form action="/login" method="POST" class="validate-form" novalidate>
+			<div class="mb-3">
+				<label class="form-label" for="image">Username</label>
+				<div class="input-group mb-3">
+					<input type="text" class="form-control" id="username" name="username" required>
+					<div class="valid-feedback">Looks good!</div>
+				</div>
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="description">Password</label>
+				<input class="form-control" name="password" type="password" minlength="8" required>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
+			<div class="mb-3">
+				<input class="btn btn-success" value="Login" type="submit">
+			</div>
+		</form>
+		<a href="/register">Register</a><br>
+		<a href="/">Cancel</a>
+	</div>
+</div>

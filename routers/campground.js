@@ -4,7 +4,7 @@ const ExpressError = require('../utils/ExpressError');
 const catchAsync = require('../utils/catchAsync');
 const Campground = require("../models/campground");
 const { campSchema, reviewSchema } = require('../models/schemas');
-
+const { isLoggedIn } = require('../utils/isLoggedIn')
 
 const validateCampground = (req, res, next) => {
     const {
@@ -25,25 +25,25 @@ router.get("/", catchAsync(async (req, res) => {
     })
 }))
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("campgrounds/new")
 })
 
-router.post("/", validateCampground, catchAsync(async (req, res, next) => {
+router.post("/", isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
     const campground = await new Campground(req.body.campground).save()
     req.flash('success', "Camp Created")
     res.redirect(`campgrounds/${campground.id}`)
 
 }))
 
-router.get("/:id/edit", catchAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, catchAsync(async (req, res) => {
     const camp = await Campground.findById(req.params.id)
     res.render(`campgrounds/edit`, {
         camp
     })
 }))
 
-router.patch('/:id', validateCampground, catchAsync(async (req, res) => {
+router.patch('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
     await Campground.findByIdAndUpdate(req.params.id, req.body.campground, {
         runValidators: true
     })
@@ -51,14 +51,14 @@ router.patch('/:id', validateCampground, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${req.params.id}`)
 }))
 
-router.get('/:id', catchAsync(async (req, res) => {
+router.get('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const camp = await Campground.findById(req.params.id).populate("reviews")
     res.render('campgrounds/show', {
         camp
     })
 }))
 
-router.delete("/:id", catchAsync(async (req, res) => {
+router.delete("/:id", isLoggedIn, catchAsync(async (req, res) => {
     await Campground.findByIdAndDelete(req.params.id)
     req.flash('success', "Camp Deleted")
     res.redirect('/campgrounds')

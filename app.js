@@ -6,6 +6,7 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 const campgroundRouter = require('./routers/campground')
 const reviewsRouter = require('./routers/reviews')
+const userRouter = require('./routers/user')
 const { title } = require('process');
 const { urlencoded } = require('express');
 const { constants } = require('buffer');
@@ -13,6 +14,9 @@ const res = require('express/lib/response');
 const { redirect } = require('express/lib/response');
 const session = require('express-session')
 const flash = require('connect-flash')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const User = require("./models/user")
 
 const sessionConfig = {
     secret:'secret',
@@ -48,14 +52,21 @@ app.use(express.urlencoded({
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(session(sessionConfig))
 app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 app.use((req, res, next) => {
-    res.locals.success = req.flash("success")
-    res.locals.error = req.flash("error")
+    console.log(req.session)
+    res.locals.user = req.user
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');  
     next()
 })
 
-
+app.use('/', userRouter)
 app.use('/campgrounds', campgroundRouter)
 app.use('/campgrounds/:id/review', reviewsRouter)
 
